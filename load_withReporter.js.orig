@@ -1,0 +1,51 @@
+/*
+In this guide, we will create a k6 test that will simulate a progressive ramp-up from 0 to 15 virtual users (VUs) for duration of ten seconds.
+ Then the 15 virtual users will remain at 15 VUs 20 seconds, and finally, 
+ it will ramp down over a duration of 10 seconds to 0 virtual use
+*/
+import http from 'k6/http';
+import { sleep } from 'k6';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+
+<<<<<<< HEAD:load.js
+
+=======
+export let options = {
+stages: [
+    { duration: '10s', target: 15 },
+    { duration: '20s', target: 15 },
+    { duration: '10s', target: 0 },
+  ],
+  thresholds: {
+    // fail the test if 95th percentile response goes above 500ms
+    http_req_duration: ['p(95)<500'],
+  },
+  // Increase teardown function timeout as MS Teams API seems to be slower than >10s
+  teardownTimeout: '60s',
+};
+>>>>>>> d3007c401c8184524c024b4e8b43f4fc92350603:load_withReporter.js
+export default function () {
+  http.get('https://test.k6.io/');
+  sleep(1.0);
+}
+<<<<<<< HEAD:load.js
+
+=======
+>>>>>>> d3007c401c8184524c024b4e8b43f4fc92350603:load_withReporter.js
+export function handleSummary(data) {
+  return {
+    "summary.html": htmlReport(data),
+  };
+}
+
+export function teardown(data) {
+  // send notification request to Microsoft Teams API
+  let event = {
+    text: 'My test just finished!',
+  };
+  let res = http.post(
+    'https://outlook.office.com/webhook/...',
+    JSON.stringify(event),
+    { headers: { 'Content-Type': 'application/json' } },
+  );
+}
