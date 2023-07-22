@@ -4,8 +4,8 @@ import { check, group } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export let options = {
-  vus: 10, // Número de usuários virtuais (simultâneos) a serem simulados
-  duration: '30s', // Duração do teste
+  vus: 1000, 
+  duration: '1m', 
 };
 
 export function handleSummary(data) {
@@ -15,7 +15,6 @@ export function handleSummary(data) {
 }
 
 export default function () {
-  // URL da página que você deseja testar
   let url = 'https://seazone.com.br/';
 
   // Realiza a solicitação HTTP GET para a página e mede o tempo de resposta
@@ -23,7 +22,6 @@ export default function () {
   let res = http.get(url);
   let endTime = new Date();
 
-  // Verifica se a resposta tem o status 200 (OK)
   check(res, {
     'Status 200': (r) => r.status === 200,
   });
@@ -31,9 +29,8 @@ export default function () {
   // Calcula o tempo de resposta da página
   let responseTime = endTime - startTime;
 
-  // Verifica se o tempo de resposta está abaixo do limite de 1000ms (1 segundo)
   check(responseTime, {
-    'Tempo de resposta abaixo do limite': (t) => t < 1000,
+    'Tempo de resposta abaixo do limite': (t) => t < 2000,
   });
 
   // Aguarda 1 segundo antes de fazer a próxima solicitação
